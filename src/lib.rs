@@ -46,6 +46,50 @@ pub fn game_prelude() -> &'static str {
     kami_engine_clj::game_prelude()
 }
 
+/// The **actor / artificial-organism** prelude (the third layer above `compile_clj`).
+///
+/// Charter-gate + heartbeat-decision primitives written in the language itself, as the
+/// shared runtime for **atproto actors** and **artificial organisms** (the etzhayyim
+/// `20-actors/*` lineage: identity / kotoba commit-DAG / social membrane / autorun). It is
+/// the scalar slice that compiles under the *current* `compile_clj` subset; the richer
+/// primitives (datom vectors / maps / strings / Ed25519 sign / http bridge / storage append)
+/// live in `lib/actor/*.cljc` and are reached via the `actor:host` ABI — exactly as games
+/// reach vec/map/timer via `GAME_PRELUDE` + the `kami:engine` ABI. See
+/// `90-docs/adr/0002-actor-organism-runtime-lib.md`.
+pub const ACTOR_PRELUDE: &str = r#"
+;; actor/organism gate vocabulary — pure, scalar, subset-compilable.
+;; A post/outward act is a charter-clean DRY-RUN unless EVERY gate holds.
+(defn actor-dry-run? [status] (= status 0))            ; 0=dry-run · 1=published(Council-gated)
+(defn actor-enough-sources? [n] (if (< n 2) false true)) ; >=2 provenance citations
+(defn actor-cash-zero? [c] (= c 0))                    ; commons-not-a-market (G2)
+(defn actor-keyless? [server-held-key] (not server-held-key)) ; no-server-key
+;; the membrane gate as one pure decision: may this become a dry-run post?
+(defn actor-may-draft? [status sources cash server-held-key]
+  (and (actor-dry-run? status)
+       (and (actor-enough-sources? sources)
+            (and (actor-cash-zero? cash)
+                 (actor-keyless? server-held-key)))))
+;; idempotent-by-content heartbeat: append only when content changed (1) else no-op (0).
+(defn actor-append? [changed] (if changed 1 0))
+"#;
+
+/// Compile an **actor / organism** `logic.clj`: [`ACTOR_PRELUDE`] is prepended (charter-gate
+/// + heartbeat primitives), then the general [`compile_clj`] core runs. Capability functions
+/// (sign / http / storage / sha256) are the `actor:host` ABI — host-provided, like
+/// `kami:engine` for games. Returns wasm bytes.
+pub fn compile_actor(src: &str) -> Result<Vec<u8>, String> {
+    let mut full = String::with_capacity(ACTOR_PRELUDE.len() + src.len() + 1);
+    full.push_str(ACTOR_PRELUDE);
+    full.push('\n');
+    full.push_str(src);
+    compile_clj(&full)
+}
+
+/// The actor/organism prelude source (helpers written in the language itself).
+pub fn actor_prelude() -> &'static str {
+    ACTOR_PRELUDE
+}
+
 /// Browser API: the compiler runs *in the page* (kototama compiled to wasm). Returns
 /// wasm bytes the browser instantiates directly — no native runtime needed.
 #[cfg(target_arch = "wasm32")]
@@ -76,6 +120,24 @@ mod tests {
     #[test]
     fn compiles_game_logic_to_wasm() {
         let w = super::compile_game("(defsystem tick [dt] (+ dt 1))").unwrap();
+        assert_eq!(&w[0..4], b"\0asm");
+    }
+
+    #[test]
+    fn compiles_actor_logic_to_wasm() {
+        // an actor's outward-membrane decision built on the ACTOR_PRELUDE gates
+        let w = super::compile_actor(
+            "(defn publish-decision [status sources cash key]
+               (if (actor-may-draft? status sources cash key) 1 0))",
+        )
+        .unwrap();
+        assert_eq!(&w[0..4], b"\0asm"); // real wasm magic
+    }
+
+    #[test]
+    fn actor_prelude_itself_compiles() {
+        // the prelude alone must be subset-clean (it is prepended to every actor program)
+        let w = super::compile_actor("(def ok 1)").unwrap();
         assert_eq!(&w[0..4], b"\0asm");
     }
 }
