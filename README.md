@@ -121,6 +121,19 @@ Implemented (ADR-0002 — promoted from the etzhayyim kanjō cell):
 
 Tests: `test_actor.clj` (gates·membrane·heartbeat·didkey, 6/31) + `test_atproto.cljc`
 (atproto·identity, 4/11) — all under bb.
+
+**`lib/actor/publish.bb`** — the actor-agnostic SELF-PUBLISH runtime every organism shares.
+An actor ships a tiny `actor.edn` (`:did :handle :ipns-key :regen :bundle :posts-file`); the
+runtime loads gates·atproto·identity, re-asserts the G-no-advice membrane on every post,
+bundles the graph, and `ipfs name publish`es it under the actor's OWN key — no operator, no
+token. Same loop for every actor:
+
+```bash
+bb <kototama>/lib/actor/publish.bb --actor <actor-dir> [--live]
+```
+
+Live today: **kanjō** (`/ipns/k51qzi5uqu5dlamopaa…rkgc1`) + **keizu** (`/ipns/k51qzi5uqu5dj2oaj…241cek`)
+— two organisms, one runtime, each self-keyed.
 - `actor:host` ABI (`lib/actor/host.edn`) — the crypto/net/storage capability boundary
   (`gen-keypair/sign/verify`, `sha256-hex`, `http-post`, `log-read/append!`, `now`) — the
   actor is the *bearer* of capability, never the holder of a server key.
