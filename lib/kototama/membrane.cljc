@@ -1,14 +1,14 @@
-(ns actor.membrane
-  "actor.membrane — the shared OUTWARD self-publication membrane for atproto actors +
+(ns kototama.membrane
+  "kototama.membrane — the shared OUTWARD self-publication membrane for atproto actors +
   artificial organisms (generalized from danjo/keizu/kosatsu/iriai `social_post`). A record
   (a readout summary) enters; it is DRAFTED into a DRY-RUN post ONLY if every charter gate
-  holds (actor.gates), else REFUSED with the failed invariants. A live post is outward-gated
+  holds (kototama.gates), else REFUSED with the failed invariants. A live post is outward-gated
   (Council Lv6+ + member/actor signature) — `build-live` refuses by construction at R0.
 
   Pure + deterministic; the actual signing + AT-proto broadcast are the HOST's job (the
-  actor self-signs with its own did:key via actor:host/sign — see actor.host — the server
+  actor self-signs with its own did:key via actor:host/sign — see kototama.host — the server
   never holds a key). This namespace only shapes + gates the post record."
-  (:require [actor.gates :as gates]))
+  (:require [kototama.gates :as gates]))
 
 (def phase-drafted :drafted)
 (def phase-refused :refused)

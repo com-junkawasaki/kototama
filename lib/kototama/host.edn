@@ -1,6 +1,6 @@
 ;; actor:host ABI — the capability boundary for atproto actors + artificial organisms,
-;; analogous to the `kami:engine` ABI for games. The PURE actor logic (actor.gates /
-;; actor.membrane / actor.heartbeat / actor.didkey) compiles to wasm under ACTOR_PRELUDE;
+;; analogous to the `kami:engine` ABI for games. The PURE actor logic (kototama.gates /
+;; kototama.membrane / kototama.heartbeat / kototama.didkey) compiles to wasm under ACTOR_PRELUDE;
 ;; anything that touches platform crypto, the network, the clock, or storage is a HOST
 ;; import the runtime provides (native bb/JVM host today; a wasm host over these imports
 ;; next). The actor is the BEARER of capability, never the holder of a server key

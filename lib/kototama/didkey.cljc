@@ -1,8 +1,8 @@
-(ns actor.didkey
-  "actor.didkey — the PORTABLE encoding half of a self-certifying did:key (Ed25519). An
+(ns kototama.didkey
+  "kototama.didkey — the PORTABLE encoding half of a self-certifying did:key (Ed25519). An
   actor self-generates its OWN keypair (the keygen/sign/verify live in actor:host — they
-  need platform crypto; see actor.host), but the *encoding* of a raw 32-byte public key into
-  `did:key:z6Mk…` is pure byte math and lives here, shared across every actor.
+  need platform crypto; see kototama.host), but the *encoding* of a raw 32-byte public key into
+  `did:key:z6Mk…` is pure byte math and lives here, shared across every kototama.
 
   did:key (Ed25519) = multicodec 0xed 0x01 ++ raw-pubkey, multibase base58btc ('z' prefix).
   base58btc is INLINED (no dependency) so this is portable to bb/JVM today and to the

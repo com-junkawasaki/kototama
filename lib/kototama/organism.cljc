@@ -51,7 +51,7 @@
                          (narrate (assoc ctx :perception perception))))
         ;; gate publication: leashed + drafting allowed + content clears §2 scan
         may?       (and (:act? decision) post-text
-                        (gates/may-draft? {:leash leash})
+                        (gates/leashed? {:leash leash})
                         (leash/valid? leash now)              ; expiry/scope, not just presence
                         (:ok? (gates/scan post-text)))
         record     (when may? (emit/post-record {:text post-text :actor-did id
