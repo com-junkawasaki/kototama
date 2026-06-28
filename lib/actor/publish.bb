@@ -13,10 +13,10 @@
          '[clojure.edn :as edn])
 
 (def here (-> *file* (java.io.File.) .getAbsoluteFile .getParentFile))
-(load-file (str here "/gates.cljc"))
-(load-file (str here "/didkey.cljc"))
-(load-file (str here "/atproto.cljc"))
-(load-file (str here "/identity.cljc"))
+(load-file (str here "/../kototama/gates.cljc"))
+(load-file (str here "/../kototama/didkey.cljc"))
+(load-file (str here "/../kototama/atproto.cljc"))
+(load-file (str here "/../kototama/identity.cljc"))
 (require '[kototama.gates :as gates] '[kototama.atproto :as at])
 
 (defn- argval [flag] (let [a (vec *command-line-args*)
