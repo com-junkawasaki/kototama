@@ -17,7 +17,7 @@
 (load-file (str here "/didkey.cljc"))
 (load-file (str here "/atproto.cljc"))
 (load-file (str here "/identity.cljc"))
-(require '[actor.gates :as gates] '[actor.atproto :as at])
+(require '[kototama.gates :as gates] '[kototama.atproto :as at])
 
 (defn- argval [flag] (let [a (vec *command-line-args*)
                            i (.indexOf a flag)] (when (>= i 0) (get a (inc i)))))

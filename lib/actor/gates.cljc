@@ -1,5 +1,5 @@
-(ns actor.gates
-  "actor.gates — the shared CHARTER-GATE vocabulary for atproto actors + artificial
+(ns kototama.gates
+  "kototama.gates — the shared CHARTER-GATE vocabulary for atproto actors + artificial
   organisms (the etzhayyim 20-actors/* lineage: iriai/kaname/tsubasa/ibuki/danjo…).
 
   Each actor re-implemented the same handful of gate predicates inline; this is the one

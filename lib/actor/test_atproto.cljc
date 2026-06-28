@@ -1,10 +1,10 @@
-(ns actor.test-atproto
+(ns kototama.test-atproto
   "Tests for the AT-Protocol surface + key-material identity (the pieces test_actor.clj —
   gates/membrane/heartbeat/didkey — does not cover)."
   (:require [clojure.string :as str]
             [clojure.test :refer [deftest is run-tests]]
-            [actor.atproto :as at]
-            [actor.identity :as id]))
+            [kototama.atproto :as at]
+            [kototama.identity :as id]))
 
 (deftest rkey-deterministic
   (is (= (at/rkey "k" "fact.x") (at/rkey "k" "fact.x")))
@@ -28,9 +28,9 @@
   (let [{:keys [public-key did]} (id/generate)]
     (is (str/starts-with? did "did:key:z6Mk"))           ; Ed25519 did:key
     (is (= 32 (count (id/raw-ed25519-pub public-key))))
-    (is (= did (id/did-of public-key)))))                 ; deterministic via actor.didkey
+    (is (= did (id/did-of public-key)))))                 ; deterministic via kototama.didkey
 
 #?(:clj
    (when (= *file* (System/getProperty "babashka.file"))
-     (let [{:keys [fail error]} (run-tests 'actor.test-atproto)]
+     (let [{:keys [fail error]} (run-tests 'kototama.test-atproto)]
        (System/exit (if (zero? (+ fail error)) 0 1)))))

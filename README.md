@@ -72,11 +72,11 @@ organism, and *publishes* to the social web — each station a separate repo, co
    tamper-evident). kototama binds to it through `actor:host` `log-read` / `log-append!`. The
    organism's whole life is a replayable commit-DAG.
 3. **LIVE — `kototama` as the artificial organism.** `compile_actor` turns the CLJ into a wasm
-   organism; `actor.heartbeat` runs the idempotent **sense → fold → decide → persist** beat
+   organism; `kototama.heartbeat` runs the idempotent **sense → fold → decide → persist** beat
    (crash/re-run safe — an unchanged beat is a structural no-op). The organism self-generates
    and present-only-signs with its OWN did:key (`actor:host/gen-keypair`/`sign`); no server
    holds a key.
-4. **PUBLISH — atproto apps (`app-aozora`, `com.etzhayyim.*`).** `actor.membrane` shapes a
+4. **PUBLISH — atproto apps (`app-aozora`, `com.etzhayyim.*`).** `kototama.membrane` shapes a
    **dry-run** post when every gate holds. A **live** broadcast is governance-gated (Council
    Lv6+ + the actor's own signature, never a server key) and then `actor:host/http-post`s the
    record to an atproto destination — **app-aozora** (the appview/PDS) and the
@@ -105,19 +105,19 @@ bb --classpath lib lib/actor/test_atproto.cljc   # atproto·identity            
 ```
 
 Implemented (ADR-0002 — promoted from the etzhayyim kanjō cell):
-- `actor.gates` — charter-gate vocabulary (≥2 sources · cash≡0 · no-server-key · dry-run ·
+- `kototama.gates` — charter-gate vocabulary (≥2 sources · cash≡0 · no-server-key · dry-run ·
   sim-only · **no-advice**) + `may-draft?` / `why-refused`. `no-advice?` / `assert-no-advice`
   reject advice/valuation/forecast text (EN on word boundaries — "ope-rating income" ≠ "rating";
   JA on substring).
-- `actor.atproto` — AT-Protocol surface: `->json` · content-addressed `rkey` (FNV-1a) ·
+- `kototama.atproto` — AT-Protocol surface: `->json` · content-addressed `rkey` (FNV-1a) ·
   `profile-record` / `record` / `feed-post` / `at-uri` (parameterized by the actor's
   DID/handle/NSID). `feed-post` text crosses `gates/assert-no-advice` — the publish membrane.
-- `actor.identity` — the KEY-MATERIAL half: Ed25519 `generate` (bb-verified) · `did-of` ·
-  `public-record`. **Reuses `actor.didkey` for the did:key encoding** (no duplication). Private
+- `kototama.identity` — the KEY-MATERIAL half: Ed25519 `generate` (bb-verified) · `did-of` ·
+  `public-record`. **Reuses `kototama.didkey` for the did:key encoding** (no duplication). Private
   key never in git.
-- `actor.didkey` — self-certifying `did:key` (Ed25519, multicodec 0xed01 + base58btc → `z6Mk…`)
-  + `attest-message`. `actor.membrane` — draft / `build-live` self-publication seam.
-  `actor.heartbeat` — idempotent-by-content commit-DAG beat. `actor:host` ABI (`host.edn`).
+- `kototama.didkey` — self-certifying `did:key` (Ed25519, multicodec 0xed01 + base58btc → `z6Mk…`)
+  + `attest-message`. `kototama.membrane` — draft / `build-live` self-publication seam.
+  `kototama.heartbeat` — idempotent-by-content commit-DAG beat. `actor:host` ABI (`host.edn`).
 
 Tests: `test_actor.clj` (gates·membrane·heartbeat·didkey, 6/31) + `test_atproto.cljc`
 (atproto·identity, 4/11) — all under bb.

@@ -1,10 +1,10 @@
 #!/usr/bin/env bb
 ;; actor common-lib tests (portable, bb/JVM).  Run:  bb --classpath lib lib/actor/test_actor.clj
-(ns actor.test-actor
-  (:require [actor.gates :as g]
-            [actor.membrane :as m]
-            [actor.heartbeat :as h]
-            [actor.didkey :as d]
+(ns kototama.test-actor
+  (:require [kototama.gates :as g]
+            [kototama.membrane :as m]
+            [kototama.heartbeat :as h]
+            [kototama.didkey :as d]
             [clojure.string :as str]
             [clojure.test :refer [deftest is run-tests]]))
 
@@ -58,5 +58,5 @@
   (is (= "did:key:zABC|bafcid" (d/attest-message "did:key:zABC" "bafcid"))))
 
 (when (= *file* (System/getProperty "babashka.file"))
-  (let [{:keys [fail error]} (run-tests 'actor.test-actor)]
+  (let [{:keys [fail error]} (run-tests 'kototama.test-actor)]
     (System/exit (if (zero? (+ fail error)) 0 1))))
