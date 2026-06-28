@@ -1,9 +1,9 @@
-(ns actor.atproto
-  "actor.atproto — the shared AT-Protocol surface for atproto actors + artificial
+(ns kototama.atproto
+  "kototama.atproto — the shared AT-Protocol surface for atproto actors + artificial
   organisms. Promoted from the etzhayyim kanjō cell (ADR-0002) to the one portable home,
   generalized so any actor parameterizes it with its own DID / handle / record NSID.
 
-  Pure, deterministic, dependency-free (only `actor.gates` + clojure.string): runs under
+  Pure, deterministic, dependency-free (only `kototama.gates` + clojure.string): runs under
   bb/JVM today, and the scalar subset under the kototama wasm runtime via ACTOR_PRELUDE.
   No clock, no PRNG in the pure path — `created-at` is passed IN and the record key is a
   CONTENT hash, so the same input always yields the same record (resume-safe).
@@ -11,7 +11,7 @@
   The membrane rule: every machine-composed outward TEXT passes `gates/assert-no-advice`
   before it can become a post — observations only, never advice / valuation / forecast."
   (:require [clojure.string :as str]
-            [actor.gates :as gates]))
+            [kototama.gates :as gates]))
 
 ;; ── content-addressed record key (FNV-1a → hex) ──────────────────────────────
 
@@ -59,11 +59,11 @@
 ;; ── generic record builders (parameterized by the actor) ─────────────────────
 
 (defn profile-record
-  "app.bsky.actor.profile. `display-name`/`description` are the actor's FIXED, human-
+  "app.bsky.kototama.profile. `display-name`/`description` are the actor's FIXED, human-
   reviewed mission text — NOT machine-composed, so not advice-guarded (it may legitimately
   negate the forbidden terms, e.g. \"no ratings\")."
   [{:keys [display-name description created-at]}]
-  {"$type" "app.bsky.actor.profile"
+  {"$type" "app.bsky.kototama.profile"
    "displayName" display-name
    "description" description
    "createdAt" created-at})

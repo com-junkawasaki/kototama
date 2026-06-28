@@ -1,4 +1,6 @@
-{:paths ["src" "resources"]
+{;; the common organism/cell library lives in ../lib (lib/kototama/*.cljc, the
+ ;; runtime's portable lib); this clj subtree adds the UNSPSC fleet on top.
+ :paths ["src" "resources" "../lib"]
  ;; UNSPSC organism actors on the Clojure substrate:
  ;;   langgraph-clj  — StateGraph orchestration (the agent graph)
  ;;   langchain-clj  — model adapter (Murakumo), Datomic-shaped EAV + kotoba_db backend

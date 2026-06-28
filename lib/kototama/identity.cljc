@@ -1,17 +1,17 @@
-(ns actor.identity
-  "actor.identity — self-issued identity for atproto actors + artificial organisms.
+(ns kototama.identity
+  "kototama.identity — self-issued identity for atproto actors + artificial organisms.
 
   The workspace model (root CLAUDE.md): an actor holds its OWN Ed25519 key → its
   key-derived name IS its graph → it is structurally authorized to self-mint/publish
   (no operator, no token, no owner hand-off). This ns is the KEY-MATERIAL half of that
   model — Ed25519 keygen (JVM/bb; java.security, verified to run under babashka) and the
-  non-secret public record. The did:key ENCODING lives in `actor.didkey` (we reuse it,
+  non-secret public record. The did:key ENCODING lives in `kototama.didkey` (we reuse it,
   not duplicate it).
 
   SECURITY: the private key NEVER touches git. Callers persist it under a gitignored
   path (e.g. `.<actor>/identity.edn`) or an IPFS keystore key — this ns only computes the
   public identity (did:key) and packages the non-secret record."
-  (:require [actor.didkey :as didkey]))
+  (:require [kototama.didkey :as didkey]))
 
 (defn raw-ed25519-pub
   "The 32-byte raw Ed25519 public key from a JDK PublicKey's X.509 SPKI encoding
@@ -22,7 +22,7 @@
      :cljs (throw (ex-info "JVM-only" {}))))
 
 (defn did-of
-  "JDK PublicKey → did:key:z6Mk… (delegates encoding to actor.didkey)."
+  "JDK PublicKey → did:key:z6Mk… (delegates encoding to kototama.didkey)."
   [pk]
   (didkey/did-key (raw-ed25519-pub pk)))
 

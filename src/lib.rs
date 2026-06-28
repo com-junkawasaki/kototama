@@ -57,20 +57,21 @@ pub fn game_prelude() -> &'static str {
 /// reach vec/map/timer via `GAME_PRELUDE` + the `kami:engine` ABI. See
 /// `90-docs/adr/0002-actor-organism-runtime-lib.md`.
 pub const ACTOR_PRELUDE: &str = r#"
-;; actor/organism gate vocabulary — pure, scalar, subset-compilable.
-;; A post/outward act is a charter-clean DRY-RUN unless EVERY gate holds.
-(defn actor-dry-run? [status] (= status 0))            ; 0=dry-run · 1=published(Council-gated)
-(defn actor-enough-sources? [n] (if (< n 2) false true)) ; >=2 provenance citations
-(defn actor-cash-zero? [c] (= c 0))                    ; commons-not-a-market (G2)
-(defn actor-keyless? [server-held-key] (not server-held-key)) ; no-server-key
+;; kototama organism/cell gate vocabulary — pure, scalar, subset-compilable.
+;; The scalar slice of kototama.gates (lib/kototama/gates.cljc); the full lib runs
+;; under bb/JVM. A post/outward act is a charter-clean DRY-RUN unless EVERY gate holds.
+(defn kototama-dry-run? [status] (= status 0))            ; 0=dry-run · 1=published(Council-gated)
+(defn kototama-enough-sources? [n] (if (< n 2) false true)) ; >=2 provenance citations
+(defn kototama-cash-zero? [c] (= c 0))                    ; commons-not-a-market (G2)
+(defn kototama-keyless? [server-held-key] (not server-held-key)) ; no-server-key
 ;; the membrane gate as one pure decision: may this become a dry-run post?
-(defn actor-may-draft? [status sources cash server-held-key]
-  (and (actor-dry-run? status)
-       (and (actor-enough-sources? sources)
-            (and (actor-cash-zero? cash)
-                 (actor-keyless? server-held-key)))))
+(defn kototama-may-draft? [status sources cash server-held-key]
+  (and (kototama-dry-run? status)
+       (and (kototama-enough-sources? sources)
+            (and (kototama-cash-zero? cash)
+                 (kototama-keyless? server-held-key)))))
 ;; idempotent-by-content heartbeat: append only when content changed (1) else no-op (0).
-(defn actor-append? [changed] (if changed 1 0))
+(defn kototama-append? [changed] (if changed 1 0))
 "#;
 
 /// Compile an **actor / organism** `logic.clj`: [`ACTOR_PRELUDE`] is prepended (charter-gate
@@ -128,7 +129,7 @@ mod tests {
         // an actor's outward-membrane decision built on the ACTOR_PRELUDE gates
         let w = super::compile_actor(
             "(defn publish-decision [status sources cash key]
-               (if (actor-may-draft? status sources cash key) 1 0))",
+               (if (kototama-may-draft? status sources cash key) 1 0))",
         )
         .unwrap();
         assert_eq!(&w[0..4], b"\0asm"); // real wasm magic

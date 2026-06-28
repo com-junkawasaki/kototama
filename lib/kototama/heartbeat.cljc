@@ -1,12 +1,12 @@
-(ns actor.heartbeat
-  "actor.heartbeat — the shared IDEMPOTENT-BY-CONTENT autorun decision for atproto actors
+(ns kototama.heartbeat
+  "kototama.heartbeat — the shared IDEMPOTENT-BY-CONTENT autorun decision for atproto actors
   + artificial organisms. Every actor's `autorun/beat` repeats the same skeleton: compute
   this beat's datoms, compare to the last committed datoms, append a new tx ONLY when the
   content changed (else a no-op). This is that decision, factored out — pure + deterministic,
   so a beat is crash/re-run safe (replaying an unchanged beat is a structural no-op).
 
   The actual storage (read last tx, append tx, hash) is the HOST's job — see
-  actor.host (the `actor:host` ABI). This namespace only decides + shapes the result."
+  kototama.host (the `actor:host` ABI). This namespace only decides + shapes the result."
   (:require [clojure.string :as str]))
 
 (defn changed?
