@@ -23,6 +23,28 @@ kotoba-edn (reader)  →  kotoba-clj (core)  +  kami-engine-clj (game layer)   �
   live CLJ-game editing on [network-isekai](https://github.com/gftdcojp/network-isekai)
   / isekai.network.
 
+## `clj/` — the common organism/cell library + the UNSPSC fleet (consolidated)
+
+The former **`kototama-clj`** repo (now archived) is consolidated here under
+[`clj/`](clj/) (一本化, [ADR-0003](90-docs/adr/0003-consolidate-kototama-clj-and-common-organism-cell-library.md)):
+
+- **`clj/src/kototama/*.cljc`** — the **common organism/cell library**, the distilled
+  subset of the kotodama cell framework + the ibuki organism pattern, dependency-free
+  `.cljc` (bb/JVM + WASM): `kotoba` (append-only content-addressed Datom log) · `cell`
+  (`defcell`) · `life` (joucho + metabolism) · `gates` (charter membrane, §2 scan) ·
+  `leash` (revocable member CACAO, present-only) · `emit` (member-signed post →
+  app-aozora / com-etzhayyim, never `:published`) · `organism` (the heartbeat
+  `beat`/`autorun`) · `core` (re-exports).
+- **`clj/src/kototama/unspsc/*`** — the 18,342-actor UNSPSC fleet (the first consumer).
+
+External consumers (e.g. etzhayyim **kyoninka 許認可**, autonomous readiness-digest
+posts) depend on `clj/` via a `:local/root`. Tests: `cd clj` then
+`bb --classpath src:test -e "(require 'kototama.core-test)(kototama.core-test/-main)"`
+(common lib, 10/36) and `clojure -M:test` (UNSPSC fleet, 50/258).
+
+> Note: `lib/actor/*` (the runtime-compiled actor prelude) and `clj/ kototama.*`
+> currently overlap; unifying the two namespace sets is a follow-up (ADR-0003).
+
 ## Stack — design → store → live → publish
 
 kototama is the **organism runtime** at the centre of a four-station loop. An actor is

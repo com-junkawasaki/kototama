@@ -1,0 +1,25 @@
+{:paths ["src" "resources"]
+ ;; UNSPSC organism actors on the Clojure substrate:
+ ;;   langgraph-clj  — StateGraph orchestration (the agent graph)
+ ;;   langchain-clj  — model adapter (Murakumo), Datomic-shaped EAV + kotoba_db backend
+ ;; Workspace-local roots. This clj subtree lives at
+ ;; orgs/com-junkawasaki/kototama/clj; the clj libs are siblings of kototama
+ ;; under orgs/com-junkawasaki/ (../../<lib>). The langchain-clj :local/root
+ ;; overrides langgraph-clj's transitive git dep so the whole stack resolves
+ ;; offline against the local checkouts.
+ :deps {io.github.com-junkawasaki/langgraph-clj {:local/root "../../langgraph-clj"}
+        io.github.com-junkawasaki/langchain-clj {:local/root "../../langchain-clj"}}
+ :aliases
+ {:test {:extra-paths ["test"]
+         :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+         :main-opts ["-m" "cognitect.test-runner"]
+         :exec-fn cognitect.test-runner.api/test}
+  ;; taxonomy EDN builder (bb or clojure): joins the UNSPSC registry + enrichment
+  :build-taxonomy {:extra-deps {org.clojure/data.json {:mvn/version "2.5.0"}}
+                   :main-opts ["-m" "kototama.unspsc.build-taxonomy"]}
+  ;; Phase 2 enrichment: dump codes needing spec, merge generated overlays
+  :enrich {:extra-deps {org.clojure/data.json {:mvn/version "2.5.0"}}
+           :main-opts ["-m" "kototama.unspsc.enrich"]}
+  ;; Phase 3: full-fleet sweep on one kotoba-Datom log
+  :fleet {:main-opts ["-m" "kototama.unspsc.fleet"]}}}
