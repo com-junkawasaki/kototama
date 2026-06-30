@@ -33,11 +33,11 @@ Host adapter only:
 ## Migration Steps
 
 1. Move `HostCaps`, `RuntimeLimits`, and import-surface schemas into a CLJC
-   contract.
+   contract. Initial pure data/functions now live in
+   `src/kototama/contract.cljc` with tests in `test/kototama/contract_test.cljc`.
 2. Generate Rust/JS host adapter shapes from that contract while native hosts
    still exist.
 3. Move package lock and grant projection to `kotoba-lang/kotoba-lang`.
 4. Keep `wasmtime` as an optional backend capability, not the runtime authority.
 5. Remove handwritten Rust semantic decisions after the generated adapters are
    stable.
-
